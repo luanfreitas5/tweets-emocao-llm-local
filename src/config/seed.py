@@ -1,0 +1,39 @@
+"""Reprodutibilidade: fixa todas as fontes de aleatoriedade.
+
+``random_state`` sozinho não é reprodutibilidade. Aqui semeamos ``random``,
+``numpy``, ``PYTHONHASHSEED`` e, se presente, ``torch``.
+"""
+
+from __future__ import annotations
+
+import os
+import random
+
+import numpy as np
+
+RANDOM_SEED = 42
+
+
+def seed_everything(seed: int = RANDOM_SEED) -> None:
+    """Fixa todas as fontes de aleatoriedade para garantir reprodutibilidade.
+
+    Parameters
+    ----------
+    seed : int, optional
+        Semente a aplicar, by default :data:`RANDOM_SEED`.
+
+    Examples
+    --------
+    >>> seed_everything(42)
+    """
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    random.seed(seed)
+    np.random.seed(seed)
+    try:  # opcional: só se torch estiver instalado
+        import torch
+
+        torch.manual_seed(seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(seed)
+    except ImportError:  # pragma: no cover - torch é dependência de runtime
+        pass
