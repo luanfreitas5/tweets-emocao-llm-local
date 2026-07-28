@@ -17,6 +17,16 @@ def test_remove_label_leakage_strips_emoticons_and_hashtags():
     assert "lindo" in result
 
 
+@pytest.mark.smoke
+def test_clean_tweet_removes_url_mention_and_lowercases():
+    """URLs e menções são removidas e o texto vira minúsculo."""
+    result = clean_tweet("@joao ODEIO isso :( http://x.co")
+    assert "@joao" not in result
+    assert "httpx2" not in result
+    assert result == result.casefold()
+    assert "odeio" in result
+
+
 def test_clean_tweet_collapses_repeated_chars():
     """Caracteres repetidos 3+ vezes são reduzidos a dois."""
     assert clean_tweet("amooooo") == "amoo"
