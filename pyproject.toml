@@ -76,8 +76,8 @@ dependencies = [
 [project.optional-dependencies]
 # API de serving (Python calcula → LLM explica), rodando 100% local
 api = [
-    "fastapi>=0.111",
-    "uvicorn[standard]>=0.51.0",
+    "fastapi>=0.140.13",
+    "uvicorn[standard]>=0.30",
 ]
 
 [tool.uv]
