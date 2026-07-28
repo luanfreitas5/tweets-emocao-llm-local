@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 def run_topics(
     settings: Settings,
     paths: ProjectPaths,
-    df: pl.DataFrame | None = None,
+    tweets_df: pl.DataFrame | None = None,
 ) -> tuple[pl.DataFrame, dict[int, list[str]]]:
     """Extrai tópicos dos tweets e atribui um tópico a cada um.
 
@@ -30,7 +30,7 @@ def run_topics(
         Configuração validada (embeddings + tópicos).
     paths : ProjectPaths
         Caminhos do projeto.
-    df : pl.DataFrame | None, optional
+    tweets_df : pl.DataFrame | None, optional
         DataFrame de entrada; se ``None``, tenta ``paths.sentiment_predictions``
         e, na ausência, ``paths.processed_tweets``.
 
@@ -39,15 +39,15 @@ def run_topics(
     tuple[pl.DataFrame, dict[int, list[str]]]
         DataFrame com ``topic_id`` e o mapa ``{topic_id: top_terms}``.
     """
-    if df is None:
+    if tweets_df is None:
         source = (
             paths.sentiment_predictions
             if paths.sentiment_predictions.exists()
             else paths.processed_tweets
         )
-        df = read_parquet(source)
+        tweets_df = read_parquet(source)
 
-    texts = df[ProcessedColumns.TEXT_CLEAN].to_list()
+    texts = tweets_df[ProcessedColumns.TEXT_CLEAN].to_list()
 
     with timed("modelagem de tópicos"):
         encoder = EmbeddingEncoder(settings.model.embeddings)
@@ -59,7 +59,7 @@ def run_topics(
 
         top_terms = {tid: topic_model.top_terms(tid) for tid in set(topic_ids) if tid != -1}
 
-    result = df.with_columns(pl.Series(ProcessedColumns.TOPIC_ID, topic_ids))
+    result = tweets_df.with_columns(pl.Series(ProcessedColumns.TOPIC_ID, topic_ids))
     write_parquet(result, paths.topic_assignments)
     logger.info("Atribuição de tópicos gravada em %s", paths.topic_assignments)
     return result, top_terms

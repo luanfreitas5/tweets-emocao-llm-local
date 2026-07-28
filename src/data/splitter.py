@@ -61,8 +61,8 @@ def stratified_split(
 
     for _, group in shuffled.group_by(label_col, maintain_order=True):
         n = group.height
-        n_test = int(round(n * test_size))
-        n_val = int(round(n * val_size))
+        n_test = round(n * test_size)
+        n_val = round(n * val_size)
         test_parts.append(group.slice(0, n_test))
         val_parts.append(group.slice(n_test, n_val))
         train_parts.append(group.slice(n_test + n_val))

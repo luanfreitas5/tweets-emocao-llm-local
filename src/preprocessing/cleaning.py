@@ -61,11 +61,12 @@ def clean_tweet(text: str, *, drop_leakage: bool = True) -> str:
     if not isinstance(text, str):
         return ""
 
-    cleaned = text
+    # URLs precisam ser removidas antes do EMOTICON: o "://" de "http://..."
+    # casa com o padrão de emoticon (ex.: ":/") e corromperia a URL.
+    cleaned = regex.URL.sub(" ", text)
     if drop_leakage:
         cleaned = remove_label_leakage(cleaned)
 
-    cleaned = regex.URL.sub(" ", cleaned)
     cleaned = regex.MENTION.sub(" ", cleaned)
     cleaned = regex.HASHTAG.sub(" ", cleaned)
     cleaned = regex.EMOTICON.sub(" ", cleaned)

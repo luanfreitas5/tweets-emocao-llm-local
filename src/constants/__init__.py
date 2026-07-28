@@ -10,7 +10,7 @@ regex
     Padrões de limpeza de tweets (URLs, menções, hashtags, emoticons).
 """
 
-from src.constants.columns import RawColumns, ProcessedColumns
+from src.constants.columns import ProcessedColumns, RawColumns
 from src.constants.labels import (
     ID_TO_SENTIMENT,
     SENTIMENT_LABELS,

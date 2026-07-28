@@ -82,30 +82,30 @@ def load_raw_tweets(
     logger.info("Lendo %s (separador=%r)", path.name, separator)
 
     try:
-        df = pl.read_csv(
+        tweets_df = pl.read_csv(
             path,
             separator=separator,
             infer_schema_length=10_000,
             ignore_errors=True,
         )
     except (pl.exceptions.PolarsError, OSError) as error:
-        logger.error("Falha ao ler o CSV bruto: %s", path)
+        logger.exception("Falha ao ler o CSV bruto: %s", path)
         raise RawDataError(f"Não foi possível ler {path}: {error}") from error
 
-    missing = set(RawColumns.ALL) - set(df.columns)  # type: ignore
+    missing = set(RawColumns.ALL) - set(tweets_df.columns)  # type: ignore
     if RawColumns.TEXT in missing or RawColumns.SENTIMENT in missing:
         raise RawDataError(f"Colunas obrigatórias ausentes em {path.name}: {sorted(missing)}")
 
-    df = df.with_columns(
+    tweets_df = tweets_df.with_columns(
         pl.col(RawColumns.SENTIMENT)
         .cast(pl.Utf8)
         .map_elements(normalize_sentiment, return_dtype=pl.Utf8)
         .alias(RawColumns.SENTIMENT)
     )
 
-    if sample_size is not None and sample_size < df.height:
-        df = df.sample(n=sample_size, seed=seed)
+    if sample_size is not None and sample_size < tweets_df.height:
+        tweets_df = tweets_df.sample(n=sample_size, seed=seed)
         logger.info("Amostra de %d tweets aplicada", sample_size)
 
-    logger.info("Carregados %d tweets de %s", df.height, path.name)
-    return df
+    logger.info("Carregados %d tweets de %s", tweets_df.height, path.name)
+    return tweets_df

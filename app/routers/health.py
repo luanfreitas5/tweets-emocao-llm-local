@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 
 from app.dependencies import get_settings
@@ -12,7 +14,7 @@ router = APIRouter(tags=["health"])
 
 
 @router.get("/health", response_model=HealthResponse)
-def health(settings: Settings = Depends(get_settings)) -> HealthResponse:
+def health(settings: Annotated[Settings, Depends(get_settings)]) -> HealthResponse:
     """Retorna o estado do serviço e o modelo LLM configurado.
 
     Parameters

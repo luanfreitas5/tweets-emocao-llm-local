@@ -50,7 +50,7 @@ class OllamaClient:
         if self._client is not None:
             return self._client
         try:
-            from ollama import Client
+            from ollama import Client  # noqa: PLC0415
 
             self._client = Client(host=self.settings.host, timeout=self.settings.timeout)
         except ImportError as error:  # pragma: no cover
@@ -92,12 +92,12 @@ class OllamaClient:
                 options=options,
             )
         except ConnectionError as error:
-            logger.error("Sem conexão com o Ollama em %s", self.settings.host)
+            logger.exception("Sem conexão com o Ollama em %s", self.settings.host)
             raise OllamaConnectionError(
                 f"Não foi possível conectar ao Ollama em {self.settings.host}: {error}"
             ) from error
         except Exception as error:
-            logger.error("Falha na geração do LLM: %s", error)
+            logger.exception("Falha na geração do LLM")
             raise LLMGenerationError(f"Erro na geração do resumo: {error}") from error
 
         content = response.get("message", {}).get("content", "").strip()

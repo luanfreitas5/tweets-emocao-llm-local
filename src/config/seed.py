@@ -28,9 +28,11 @@ def seed_everything(seed: int = RANDOM_SEED) -> None:
     """
     os.environ["PYTHONHASHSEED"] = str(seed)
     random.seed(seed)
-    np.random.seed(seed)
+    rng = np.random.default_rng(seed)
+    rng.normal()
+
     try:  # opcional: só se torch estiver instalado
-        import torch
+        import torch  # noqa: PLC0415
 
         torch.manual_seed(seed)
         if torch.cuda.is_available():

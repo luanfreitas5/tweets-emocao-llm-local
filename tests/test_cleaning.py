@@ -17,9 +17,6 @@ def test_remove_label_leakage_strips_emoticons_and_hashtags():
     assert "lindo" in result
 
 
-
-
-
 def test_clean_tweet_collapses_repeated_chars():
     """Caracteres repetidos 3+ vezes são reduzidos a dois."""
     assert clean_tweet("amooooo") == "amoo"

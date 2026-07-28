@@ -36,7 +36,7 @@ def _resolve_device(device: str) -> int:
     if device == "cpu":
         return -1
     try:
-        import torch
+        import torch  # noqa: PLC0415
 
         if device in {"auto", "cuda"} and torch.cuda.is_available():
             return 1
@@ -80,7 +80,7 @@ class SentimentClassifier:
         if self._pipeline is not None:
             return self._pipeline
         try:
-            from transformers import pipeline
+            from transformers import pipeline  # noqa: PLC0415
 
             logger.info("Carregando modelo de sentimento: %s", self.params.model_name)
             self._pipeline = pipeline(
@@ -91,7 +91,7 @@ class SentimentClassifier:
                 max_length=self.params.max_length,
             )
         except Exception as error:
-            logger.error("Falha ao carregar o modelo de sentimento: %s", error)
+            logger.exception("Falha ao carregar o modelo de sentimento")
             raise ModelLoadError(
                 f"Não foi possível carregar {self.params.model_name}: {error}"
             ) from error
@@ -125,7 +125,7 @@ class SentimentClassifier:
         try:
             outputs = classifier(texts, batch_size=self.params.batch_size)
         except Exception as error:
-            logger.error("Falha na inferência de sentimento: %s", error)
+            logger.exception("Falha na inferência de sentimento")
             raise ModelInferenceError(f"Erro ao classificar sentimento: {error}") from error
 
         return [

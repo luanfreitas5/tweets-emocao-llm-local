@@ -56,12 +56,12 @@ class EmbeddingEncoder:
         if self._model is not None:
             return self._model
         try:
-            from sentence_transformers import SentenceTransformer
+            from sentence_transformers import SentenceTransformer  # noqa: PLC0415
 
             logger.info("Carregando modelo de embeddings: %s", self.params.model_name)
             self._model = SentenceTransformer(self.params.model_name)
         except Exception as error:
-            logger.error("Falha ao carregar embeddings: %s", error)
+            logger.exception("Falha ao carregar embeddings")
             raise ModelLoadError(
                 f"Não foi possível carregar {self.params.model_name}: {error}"
             ) from error

@@ -53,7 +53,7 @@ class TopicModel:
             Se o BERTopic não puder ser instanciado.
         """
         try:
-            from bertopic import BERTopic
+            from bertopic import BERTopic  # noqa: PLC0415
 
             nr_topics = None if self.params.nr_topics == "auto" else self.params.nr_topics
             return BERTopic(
@@ -66,7 +66,7 @@ class TopicModel:
                 verbose=True,
             )
         except Exception as error:
-            logger.error("Falha ao instanciar o BERTopic: %s", error)
+            logger.exception("Falha ao instanciar o BERTopic")
             raise ModelLoadError(f"Não foi possível criar o BERTopic: {error}") from error
 
     def fit_transform(self, texts: list[str], embeddings: NDArray[np.float32]) -> list[int]:

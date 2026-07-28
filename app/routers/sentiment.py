@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.dependencies import get_classifier
@@ -16,7 +18,7 @@ router = APIRouter(prefix="/sentiment", tags=["sentiment"])
 @router.post("", response_model=SentimentResponse)
 def classify(
     payload: SentimentRequest,
-    classifier: SentimentClassifier = Depends(get_classifier),
+    classifier: Annotated[SentimentClassifier, Depends(get_classifier)],
 ) -> SentimentResponse:
     """Classifica o sentimento de uma lista de textos.
 

@@ -45,10 +45,10 @@ def run_full_pipeline(
         with_sentiment = run_sentiment(settings, paths, processed)
 
         top_terms: dict[int, list[str]] | None = None
-        df = with_sentiment
+        sentiment_df = with_sentiment
         if with_topics:
-            df, top_terms = run_topics(settings, paths, with_sentiment)
+            sentiment_df, top_terms = run_topics(settings, paths, with_sentiment)
 
-        response = run_summarization(settings, paths, df, top_terms)
+        response = run_summarization(settings, paths, sentiment_df, top_terms)
     logger.info("Pipeline concluído com sucesso.")
     return response

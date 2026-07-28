@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.dependencies import get_summarizer
@@ -15,7 +17,7 @@ router = APIRouter(prefix="/summary", tags=["summary"])
 @router.post("", response_model=SummaryResponse)
 def summarize(
     report: InsightsReport,
-    summarizer: InsightSummarizer = Depends(get_summarizer),
+    summarizer: Annotated[InsightSummarizer, Depends(get_summarizer)],
 ) -> SummaryResponse:
     """Gera um resumo em linguagem simples a partir de um relatório estruturado.
 

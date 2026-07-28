@@ -11,16 +11,13 @@ Uso
 from __future__ import annotations
 
 import argparse
-
-from src.pipelines.workflow import run_full_pipeline
-
-import argparse
 from dataclasses import dataclass
 
 from src.config.logging import configure_logging
 from src.config.paths import ProjectPaths, get_paths
 from src.config.seed import seed_everything
 from src.config.settings import Settings, load_settings
+from src.pipelines.workflow import run_full_pipeline
 
 
 @dataclass(frozen=True, slots=True)

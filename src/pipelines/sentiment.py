@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 def run_sentiment(
     settings: Settings,
     paths: ProjectPaths,
-    df: pl.DataFrame | None = None,
+    tweets_df: pl.DataFrame | None = None,
     chunk_size: int = 10_000,
 ) -> pl.DataFrame:
     """Classifica o sentimento dos tweets em lotes e persiste as predições.
@@ -30,7 +30,7 @@ def run_sentiment(
         Configuração validada (hiperparâmetros do classificador).
     paths : ProjectPaths
         Caminhos do projeto.
-    df : pl.DataFrame | None, optional
+    tweets_df : pl.DataFrame | None, optional
         DataFrame processado; se ``None``, lê de ``paths.processed_tweets``.
     chunk_size : int, optional
         Tamanho do bloco de textos por chamada, by default 10_000.
@@ -41,11 +41,11 @@ def run_sentiment(
         DataFrame com ``sentiment_pred`` e ``sentiment_score`` adicionados,
         persistido em ``paths.sentiment_predictions``.
     """
-    if df is None:
-        df = read_parquet(paths.processed_tweets)
+    if tweets_df is None:
+        tweets_df = read_parquet(paths.processed_tweets)
 
     classifier = SentimentClassifier(settings.model.sentiment)
-    texts = df[ProcessedColumns.TEXT_CLEAN].to_list()
+    texts = tweets_df[ProcessedColumns.TEXT_CLEAN].to_list()
 
     labels: list[str] = []
     scores: list[float] = []
@@ -58,7 +58,7 @@ def run_sentiment(
             scores.extend(p.score for p in predictions)
             progress.update(task, advance=len(batch))
 
-    result = df.with_columns(
+    result = tweets_df.with_columns(
         pl.Series(ProcessedColumns.SENTIMENT_PRED, labels),
         pl.Series(ProcessedColumns.SENTIMENT_SCORE, scores),
     )
