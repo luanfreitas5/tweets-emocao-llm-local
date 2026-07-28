@@ -1,0 +1,37 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Pipeline completo (amostra)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.main",
+            "args": ["--sample-size", "2000"],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            "name": "Etapa: pré-processamento",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.cli.preprocess",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "API FastAPI (uvicorn)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": ["app.main:app", "--reload", "--port", "8000"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Pytest (arquivo atual)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": ["${file}", "-v"],
+            "console": "integratedTerminal"
+        }
+    ]
+}
