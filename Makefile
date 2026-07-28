@@ -89,8 +89,7 @@ pre-commit:  ## Roda todos os hooks do pre-commit em todos os arquivos
 update-hooks:  ## Atualiza os hooks do pre-commit
 	$(UV) run pre-commit autoupdate
 
-update-version:
-	$(UV) add --dev commitizen
+release:  ## Cria uma nova release (versão + changelog + tag)
 	$(UV) run cz changelog
 	$(UV) run cz bump --changelog --yes
 

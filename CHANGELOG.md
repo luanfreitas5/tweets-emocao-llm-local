@@ -1,24 +1,31 @@
-# Changelog
+## v0.2.0 (2026-07-28)
 
-Todas as mudanças notáveis deste projeto são documentadas aqui.
+### Feat
 
-O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o
-projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
+- adiciona workflows e configurações para CI/CD
+- adiciona configuração do ambiente e documentação
+- adiciona arquivos de configuração para o projeto - Cria config.yaml com configurações gerais. - Cria deploy.yaml para configuração da API FastAPI. - Cria llm.yaml para configuração do LLM local. - Cria logging.yaml para configuração do logger. - Cria model_params.yaml com hiperparâmetros dos modelos. - Cria paths.yaml para caminhos de dados e saídas.
+- adiciona nova funcionalidade de autenticação Implementa sistema de autenticação de usuários com suporte a login e registro. Melhora a segurança das credenciais armazenadas.
+- adiciona testes para validação e processamento de dados
+- adiciona estrutura inicial da API com roteadores e injeção de dependências
+- adiciona pipelines para processamento de tweets
+- adiciona arquivos de configuração (.env, Makefile, mkdocs.yml)
+- adiciona Dockerfile e docker-compose.yml para orquestração da API
+- adiciona arquivo pyproject.toml com configuração do projeto
+- adiciona arquivos de configuração e documentação inicial
 
-## [Não lançado]
+### Fix
 
-### Adicionado
-- Estrutura inicial do projeto (configs, `src/`, `app/`, testes, docs).
-- Pipeline "Python calcula, LLM explica":
-  - Limpeza de tweets com remoção de *leakage* de emoticons/hashtags.
-  - Classificação de sentimento com Transformer pt-BR (BERTimbau/afins).
-  - Modelagem de tópicos com embeddings + BERTopic.
-  - Agregação de insights em `InsightsReport` (JSON) e resumo via Ollama local.
-- API FastAPI local (`/sentiment`, `/summary`, `/health`).
-- Contratos de dados (pandera), avaliação com IC 95% e por fatia.
-- Model Card e Datasheet.
+- corrige exibição da distribuição de sentimentos
+- corrige a leitura e processamento de tweets
 
-## [0.1.0] - 2026-07-05
+### Refactor
 
-### Adicionado
-- Versão inicial do esqueleto do projeto.
+- atualiza a orquestração do pipeline e remove comandos CLI
+- melhora a normalização de sentimentos e limpeza de texto
+- melhora a legibilidade da função encode
+- remove resultados desnecessários do baseline
+- simplifica chamada ao modelo de embeddings
+- melhora a legibilidade e tratamento de exceções
+- reorganiza e melhora a configuração do Makefile
+- melhora a legibilidade dos testes e renomeia variáveis
