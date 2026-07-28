@@ -8,6 +8,7 @@ modelo só é baixado/instanciado no primeiro ``predict``.
 from __future__ import annotations
 
 import logging
+from contextlib import suppress
 from typing import TYPE_CHECKING, Any
 
 from src.config.settings import SentimentParams
@@ -35,13 +36,11 @@ def _resolve_device(device: str) -> int:
     """
     if device == "cpu":
         return -1
-    try:
+    with suppress(ImportError):
         import torch  # noqa: PLC0415
 
         if device in {"auto", "cuda"} and torch.cuda.is_available():
             return 1
-    except ImportError:  # pragma: no cover
-        pass
     return -1
 
 

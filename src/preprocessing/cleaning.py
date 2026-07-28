@@ -72,5 +72,4 @@ def clean_tweet(text: str, *, drop_leakage: bool = True) -> str:
     cleaned = regex.EMOTICON.sub(" ", cleaned)
     cleaned = regex.NUMBER.sub(" ", cleaned)
     cleaned = regex.REPEATED_CHARS.sub(r"\1\1", cleaned)
-    cleaned = regex.WHITESPACE.sub(" ", cleaned).strip()
-    return cleaned.casefold()
+    return regex.WHITESPACE.sub(" ", cleaned).strip().casefold()

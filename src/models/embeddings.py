@@ -85,11 +85,10 @@ class EmbeddingEncoder:
         if not texts:
             return np.empty((0, 0), dtype=np.float32)
         model = self._ensure_loaded()
-        embeddings = model.encode(
+        return model.encode(
             texts,
             batch_size=self.params.batch_size,
             normalize_embeddings=self.params.normalize,
             show_progress_bar=show_progress,
             convert_to_numpy=True,
-        )
-        return embeddings.astype(np.float32)
+        ).astype(np.float32)
