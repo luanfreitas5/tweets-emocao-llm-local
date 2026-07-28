@@ -84,8 +84,7 @@ class EmbeddingEncoder:
         """
         if not texts:
             return np.empty((0, 0), dtype=np.float32)
-        model = self._ensure_loaded()
-        return model.encode(
+        return self._ensure_loaded().encode(
             texts,
             batch_size=self.params.batch_size,
             normalize_embeddings=self.params.normalize,
