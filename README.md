@@ -50,6 +50,7 @@ ollama pull llama3.1:8b
 
 make pipeline                             # fluxo completo
 uv run python -m src.main --sample-size 5000   # execução rápida
+uv run python -m src.main --stage classify     # roda só uma etapa (preprocess|classify|topics|summarize)
 make api                                  # API local em http://127.0.0.1:8000/docs
 ```
 
@@ -81,7 +82,7 @@ src/
   preprocessing/  limpeza + anti-leakage        models/     BERTimbau, embeddings, BERTopic
   analysis/       InsightsReport (Python calcula) llm/       Ollama, prompts, summarizer
   evaluation/     métricas com IC e por fatia     pipelines/ etapas + fluxo ponta a ponta
-  schemas/        contratos pandera + Pydantic    cli/       comandos por etapa
+  schemas/        contratos pandera + Pydantic    main.py    orquestração (--stage)
 app/          API FastAPI (/sentiment, /summary, /health)
 tests/        unit + property-based + smoke
 docs/         MkDocs Material  ·  reports/  Model Card + Datasheet

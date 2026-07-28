@@ -146,19 +146,19 @@ tree:
 
 # --- Pipeline do projeto (Python calcula, LLM explica) ---------------------
 preprocess:  ## Limpa os tweets brutos e grava o parquet processado (remove leakage de emoticons)
-	$(UV) run python -m src.cli.preprocess
+	$(RUN) --stage preprocess
 
 classify:  ## Classifica o sentimento dos tweets com BERTimbau
-	$(UV) run python -m src.cli.classify
+	$(RUN) --stage classify
 
 topics:  ## Extrai tópicos com embeddings + BERTopic
-	$(UV) run python -m src.cli.topics
+	$(RUN) --stage topics
 
 summarize:  ## Gera resumos em linguagem simples via LLM local (Ollama) a partir do JSON estruturado
-	$(UV) run python -m src.cli.summarize
+	$(RUN) --stage summarize
 
 pipeline:  ## Executa o fluxo ponta a ponta (preprocess -> classify -> topics -> summarize)
-	$(RUN)
+	$(RUN) --stage all
 
 api:  ## Sobe a API FastAPI localmente (requer: make api-deps)
 	$(UV) run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000

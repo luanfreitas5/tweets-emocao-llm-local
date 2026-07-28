@@ -14,7 +14,8 @@
             "name": "Etapa: pré-processamento",
             "type": "debugpy",
             "request": "launch",
-            "module": "src.cli.preprocess",
+            "module": "src.main",
+            "args": ["--stage", "preprocess"],
             "console": "integratedTerminal"
         },
         {

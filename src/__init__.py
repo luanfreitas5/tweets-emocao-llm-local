@@ -26,8 +26,6 @@ visualization
     Gráficos com paleta consistente.
 pipelines
     Orquestração de cada etapa e do fluxo ponta a ponta.
-cli
-    Comandos de linha de comando para cada etapa.
 schemas
     Contratos de dados (pandera) e modelos Pydantic de I/O do LLM.
 utils
