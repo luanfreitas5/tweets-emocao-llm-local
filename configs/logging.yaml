@@ -1,0 +1,23 @@
+# =============================================================================
+# logging.yaml — configuração do logger (console rich + arquivo com rotação).
+# Consumido por src/config/logging.py.
+# =============================================================================
+
+level: "INFO"
+
+console:
+  # Handler rico (cor + tracebacks). Inclui name, levelname e message.
+  rich_tracebacks: true
+  show_path: true
+  show_time: true
+
+file:
+  enabled: true
+  directory: "logs"
+  # Rotação diária: logs/log_YYYY-MM-DD.log
+  filename_pattern: "log_%Y-%m-%d.log"
+  # Formato do arquivo (separado por TAB), conforme padrão do projeto.
+  format: "%(asctime)s \t %(levelname)s \t %(name)s \t %(message)s"
+  when: "midnight"
+  backup_count: 14
+  encoding: "utf-8"

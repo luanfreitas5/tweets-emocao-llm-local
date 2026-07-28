@@ -1,0 +1,16 @@
+# =============================================================================
+# config.yaml — configurações gerais do projeto.
+# Carregado e validado em runtime por src/config/settings.py (Pydantic).
+# =============================================================================
+
+project_name: "tweets-emocao-llm-local"
+random_seed: 42
+
+# Idioma dos textos processados (afeta modelos e stopwords).
+language: "pt"
+
+# Amostragem para execuções rápidas/dev. `null` = usa toda a base (~800k).
+sample_size: null
+
+# Nível de log padrão (sobrescrito por configs/logging.yaml).
+log_level: "INFO"

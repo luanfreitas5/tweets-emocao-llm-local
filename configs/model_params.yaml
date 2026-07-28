@@ -1,0 +1,42 @@
+# =============================================================================
+# model_params.yaml — hiperparâmetros dos modelos.
+# Validado por src/config/settings.py (Pydantic).
+# Arquitetura "Python calcula": aqui ficam os parâmetros do que é *computado*.
+# =============================================================================
+
+# --- Classificação de sentimento (BERTimbau fine-tuned, zero/low-shot) -------
+sentiment:
+  # Modelo pt-BR do Hugging Face Hub para sentimento em 3 classes.
+  model_name: "lxyuan/distilbert-base-multilingual-cased-sentiments-student"
+  # Alternativa forte (pt-BR): "pysentimiento/bertweet-pt-sentiment"
+  batch_size: 64
+  max_length: 128
+  device: "auto"            # auto | cpu | cuda
+  # Mapeia rótulos do modelo -> rótulos canônicos do projeto.
+  label_map:
+    positive: "Positivo"
+    negative: "Negativo"
+    neutral: "Neutro"
+
+# --- Embeddings de sentença (para clusterização de tópicos) ------------------
+embeddings:
+  model_name: "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+  batch_size: 128
+  normalize: true
+
+# --- Modelagem de tópicos (BERTopic) -----------------------------------------
+topics:
+  language: "multilingual"
+  min_topic_size: 50        # tamanho mínimo de cluster
+  nr_topics: "auto"         # reduz automaticamente tópicos redundantes
+  top_n_words: 10
+  calculate_probabilities: false
+  low_memory: true          # necessário para ~800k documentos
+
+# --- Avaliação ---------------------------------------------------------------
+evaluation:
+  # Métrica principal: F1-macro (classes desbalanceadas, todas importam igual).
+  primary_metric: "f1_macro"
+  cv_folds: 5
+  bootstrap_iterations: 1000
+  min_f1_macro: 0.70        # regressão de métrica falha o build abaixo disso

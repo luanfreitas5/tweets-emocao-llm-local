@@ -1,0 +1,35 @@
+# =============================================================================
+# paths.yaml — caminhos de dados, modelos e saídas (relativos à raiz do projeto).
+# Resolvidos para pathlib.Path em src/config/paths.py.
+# =============================================================================
+
+data:
+  raw: "data/raw"
+  interim: "data/interim"
+  processed: "data/processed"
+  external: "data/external"
+
+# Arquivos-chave do fluxo.
+files:
+  # Base bruta rotulada por supervisão distante (emoticons / hashtags).
+  raw_labeled: "data/raw/NoThemeTweets.csv"
+  # Saída da limpeza (contrato: ProcessedTweetsSchema).
+  processed_tweets: "data/processed/tweets_processed.parquet"
+  # Saída da classificação de sentimento.
+  sentiment_predictions: "data/processed/sentiment_predictions.parquet"
+  # Saída da modelagem de tópicos.
+  topic_assignments: "data/processed/topic_assignments.parquet"
+  # JSON estruturado consumido pelo LLM (entrada do resumo).
+  insights_json: "reports/insights.json"
+  # Resumo em linguagem simples gerado pelo LLM local.
+  summary_markdown: "reports/summary.md"
+
+models:
+  root: "models"
+  topic_model: "models/bertopic"
+
+reports:
+  root: "reports"
+  figures: "reports/figures"
+
+logs: "logs"

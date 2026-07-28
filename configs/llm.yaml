@@ -1,0 +1,26 @@
+# =============================================================================
+# llm.yaml — configuração do LLM local (Ollama).
+# Papel do LLM: APENAS gerar resumos em linguagem simples a partir de JSON
+# estruturado já computado em Python. Nunca calcula métricas nem inventa dados.
+# =============================================================================
+
+provider: "ollama"
+
+# Endereço do servidor Ollama local (nada sai da máquina).
+host: "http://127.0.0.1:11434"
+
+# Modelo local. Sugestões: "llama3.1:8b", "gemma2:9b", "qwen2.5:7b".
+model: "llama3.1:8b"
+
+# Determinismo: temperatura baixa reduz variação e alucinação.
+options:
+  temperature: 0.1
+  top_p: 0.9
+  num_ctx: 8192
+  seed: 42
+
+# Tempo máximo (s) por chamada de geração.
+timeout: 120
+
+# Idioma do resumo final.
+output_language: "pt-BR"
