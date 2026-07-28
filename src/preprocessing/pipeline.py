@@ -11,7 +11,7 @@ import logging
 import polars as pl
 
 from src.constants.columns import ProcessedColumns, RawColumns
-from src.constants.labels import SENTIMENT_TO_ID
+from src.constants.labels import SENTIMENT_TO_ID, normalize_sentiment
 from src.preprocessing.cleaning import clean_tweet
 from src.schemas.processed import validate_processed
 from src.schemas.raw import validate_raw
@@ -53,6 +53,9 @@ def preprocess_tweets(df: pl.DataFrame, *, min_length: int = 3) -> pl.DataFrame:
             pl.col(RawColumns.TEXT)
             .map_elements(clean_tweet, return_dtype=pl.Utf8)
             .alias(ProcessedColumns.TEXT_CLEAN),
+            pl.col(RawColumns.SENTIMENT)
+            .map_elements(normalize_sentiment, return_dtype=pl.Utf8)
+            .alias(RawColumns.SENTIMENT),
         )
         .with_columns(
             pl.col(RawColumns.SENTIMENT)
