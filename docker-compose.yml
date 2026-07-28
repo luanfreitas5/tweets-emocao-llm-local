@@ -1,0 +1,44 @@
+# =============================================================================
+# docker-compose.yml — orquestra a API, o Ollama (LLM local) e o MLflow.
+# Tudo local: nenhum dado sai da máquina.
+# =============================================================================
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      OLLAMA_HOST: "http://ollama:11434"
+      MLFLOW_TRACKING_URI: "http://mlflow:5000"
+    depends_on:
+      - ollama
+    volumes:
+      - ./data:/app/data:ro
+      - ./reports:/app/reports
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    # Descomente para usar GPU NVIDIA:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri /mlruns
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlruns
+
+volumes:
+  ollama_models:
