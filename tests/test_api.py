@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 import pytest
-
-pytest.importorskip("fastapi")
-
+from app.main import create_app
 from fastapi.testclient import TestClient
 
-from app.main import create_app
+pytest.importorskip("fastapi")
 
 
 @pytest.fixture

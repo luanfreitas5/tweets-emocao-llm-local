@@ -26,7 +26,7 @@ def test_preprocess_removes_leakage_from_clean_text(raw_df: pl.DataFrame):
 
 def test_preprocess_drops_short_noise():
     """Tweets que viram ruído curto após a limpeza são descartados."""
-    df = pl.DataFrame(
+    tweets_df = pl.DataFrame(
         {
             "id": [1, 2],
             "tweet_text": [":)", "conteúdo real e relevante"],
@@ -35,5 +35,5 @@ def test_preprocess_drops_short_noise():
             "query_used": [":)", "tema"],
         }
     )
-    processed = preprocess_tweets(df, min_length=3)
+    processed = preprocess_tweets(tweets_df, min_length=3)
     assert processed.height == 1

@@ -18,7 +18,7 @@ def test_validate_raw_accepts_valid(raw_df: pl.DataFrame):
 
 def test_validate_processed_rejects_unknown_label():
     """O contrato processado rejeita rótulos fora do vocabulário."""
-    df = pl.DataFrame(
+    processed_df = pl.DataFrame(
         {
             ProcessedColumns.ID: [1],
             ProcessedColumns.TEXT_CLEAN: ["texto limpo"],
@@ -27,12 +27,12 @@ def test_validate_processed_rejects_unknown_label():
         }
     )
     with pytest.raises(SchemaError):
-        validate_processed(df)
+        validate_processed(processed_df)
 
 
 def test_validate_processed_rejects_empty_text():
     """O contrato processado rejeita texto limpo vazio."""
-    df = pl.DataFrame(
+    processed_df = pl.DataFrame(
         {
             ProcessedColumns.ID: [1],
             ProcessedColumns.TEXT_CLEAN: [""],
@@ -41,4 +41,4 @@ def test_validate_processed_rejects_empty_text():
         }
     )
     with pytest.raises(SchemaError):
-        validate_processed(df)
+        validate_processed(processed_df)
