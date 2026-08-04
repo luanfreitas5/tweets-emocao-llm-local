@@ -77,7 +77,7 @@ dependencies = [
 # API de serving (Python calcula → LLM explica), rodando 100% local
 api = [
     "fastapi>=0.140.13",
-    "uvicorn[standard]>=0.30",
+    "uvicorn[standard]>=0.52.0",
 ]
 
 [tool.uv]
