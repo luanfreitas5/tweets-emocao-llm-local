@@ -32,7 +32,7 @@ def run_topics(
         Caminhos do projeto.
     tweets_df : pl.DataFrame | None, optional
         DataFrame de entrada; se ``None``, tenta ``paths.sentiment_predictions``
-        e, na ausência, ``paths.processed_tweets``.
+        e, na ausência, ``paths.silver_tweets``.
 
     Returns
     -------
@@ -43,7 +43,7 @@ def run_topics(
         source = (
             paths.sentiment_predictions
             if paths.sentiment_predictions.exists()
-            else paths.processed_tweets
+            else paths.silver_tweets
         )
         tweets_df = read_parquet(source)
 

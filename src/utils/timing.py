@@ -18,6 +18,8 @@ from rich.progress import (
     TimeRemainingColumn,
 )
 
+from src.config.logging import CONSOLE
+
 logger = logging.getLogger(__name__)
 
 
@@ -37,6 +39,7 @@ def build_progress() -> Progress:
         TaskProgressColumn(),
         TimeElapsedColumn(),
         TimeRemainingColumn(),
+        console=CONSOLE,  # mesmo console do RichHandler: o log sai acima da barra
     )
 
 

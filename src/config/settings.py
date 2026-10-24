@@ -7,6 +7,7 @@ execução. Segredos vêm apenas do ``.env`` (nunca commitados).
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any, Literal
 
@@ -90,6 +91,14 @@ class LLMSettings(BaseModel):
     model_config = {"protected_namespaces": ()}
 
 
+class ExperimentSettings(BaseModel):
+    """Configuração do rastreamento de experimentos (MLflow com backend SQLite)."""
+
+    enabled: bool = False
+    tracking_uri: str = "sqlite:///mlruns/mlflow.db"
+    experiment_name: str = "tweets-emocao-llm-local"
+
+
 class Settings(BaseSettings):
     """Configuração global do projeto, carregada de YAML + ``.env``, validada.
 
@@ -109,6 +118,8 @@ class Settings(BaseSettings):
         Hiperparâmetros dos modelos computacionais.
     llm : LLMSettings
         Configuração do LLM local (apenas resumo).
+    experiment : ExperimentSettings
+        Rastreamento de experimentos com MLflow.
 
     Examples
     --------
@@ -132,6 +143,7 @@ class Settings(BaseSettings):
 
     model: ModelParams
     llm: LLMSettings
+    experiment: ExperimentSettings = ExperimentSettings()
 
 
 def _read_yaml(path: Path) -> dict[str, Any]:
@@ -146,7 +158,8 @@ def load_settings(configs_dir: Path = CONFIGS_DIR) -> Settings:
     """Carrega e valida todas as configurações do projeto.
 
     Combina ``config.yaml``, ``model_params.yaml`` e ``llm.yaml`` em um único
-    objeto :class:`Settings` validado por Pydantic.
+    objeto :class:`Settings` validado por Pydantic. A variável de ambiente
+    ``OLLAMA_HOST`` sobrescreve ``llm.host``.
 
     Parameters
     ----------
@@ -168,5 +181,7 @@ def load_settings(configs_dir: Path = CONFIGS_DIR) -> Settings:
     general = _read_yaml(configs_dir / "config.yaml")
     model_params = _read_yaml(configs_dir / "model_params.yaml")
     llm_params = _read_yaml(configs_dir / "llm.yaml")
+    if ollama_host := os.environ.get("OLLAMA_HOST"):  # ex.: http://ollama:11434 no docker-compose
+        llm_params["host"] = ollama_host
 
     return Settings(model=ModelParams(**model_params), llm=LLMSettings(**llm_params), **general)

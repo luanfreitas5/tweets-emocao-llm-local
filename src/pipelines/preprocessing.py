@@ -1,4 +1,4 @@
-"""Pipeline de limpeza: raw CSV -> parquet processado."""
+"""Pipeline de limpeza: bronze (CSV) -> silver (parquet)."""
 
 from __future__ import annotations
 
@@ -29,13 +29,13 @@ def run_preprocessing(settings: Settings, paths: ProjectPaths) -> pl.DataFrame:
     Returns
     -------
     pl.DataFrame
-        DataFrame processado (também persistido em ``paths.processed_tweets``).
+        DataFrame processado (também persistido em ``paths.silver_tweets``).
     """
     with timed("pré-processamento dos tweets"):
         raw = load_raw_tweets(
-            paths.raw_labeled, sample_size=settings.sample_size, seed=settings.random_seed
+            paths.bronze_tweets, sample_size=settings.sample_size, seed=settings.random_seed
         )
         processed = preprocess_tweets(raw)
-        write_parquet(processed, paths.processed_tweets)
-        logger.info("Parquet processado gravado em %s", paths.processed_tweets)
+        write_parquet(processed, paths.silver_tweets)
+        logger.info("Parquet processado gravado em %s", paths.silver_tweets)
     return processed

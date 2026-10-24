@@ -7,7 +7,8 @@ paths
 settings
     Carrega e valida os YAMLs de ``configs/`` e o ``.env`` com Pydantic.
 logging
-    Configura logging com ``RichHandler`` e rotação diária de arquivo.
+    Logging único (dictConfig de ``configs/logging.yaml``): console ``rich`` + arquivo
+    com rotação diária. ``configure_logging`` só é chamada no ponto de entrada.
 seed
     Fixa todas as fontes de aleatoriedade para reprodutibilidade.
 """

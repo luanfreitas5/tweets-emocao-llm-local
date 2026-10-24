@@ -1,0 +1,49 @@
+{
+  "n_evaluated": 713518,
+  "primary_metric": "f1_macro",
+  "f1_macro": 0.36177732235179544,
+  "f1_macro_ci95": [
+    0.3609780963407068,
+    0.36256277709672263
+  ],
+  "ci_method": "bootstrap, 1000 reamostragens",
+  "seed": 42,
+  "per_class": {
+    "Negativo": {
+      "precision": 0.7036053640782628,
+      "recall": 0.6096765454152927,
+      "f1-score": 0.6532819566094991,
+      "support": 472462.0
+    },
+    "Positivo": {
+      "precision": 0.42270033854445727,
+      "recall": 0.44182264701977964,
+      "f1-score": 0.43205001044588726,
+      "support": 241056.0
+    },
+    "Neutro": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 0.0
+    },
+    "accuracy": 0.5529685305766638,
+    "macro avg": {
+      "precision": 0.37543523420757335,
+      "recall": 0.3504997308116908,
+      "f1-score": 0.36177732235179544,
+      "support": 713518.0
+    },
+    "weighted avg": {
+      "precision": 0.6087039855074671,
+      "recall": 0.5529685305766638,
+      "f1-score": 0.5785406214022364,
+      "support": 713518.0
+    }
+  },
+  "per_slice_f1_macro": {
+    "curto_1_5": 0.3341690569227707,
+    "longo_16_mais": 0.37368325499484206,
+    "medio_6_15": 0.36572449492246145
+  }
+}

@@ -1,4 +1,4 @@
-"""Catálogo dos arquivos brutos disponíveis em ``data/raw``."""
+"""Catálogo dos arquivos brutos disponíveis em ``data/bronze``."""
 
 from __future__ import annotations
 
@@ -25,13 +25,13 @@ class DatasetEntry:
     size_mb: float
 
 
-def list_raw_datasets(data_raw: Path) -> list[DatasetEntry]:
-    """Lista os arquivos CSV disponíveis em ``data/raw`` (recursivamente).
+def list_raw_datasets(data_bronze: Path) -> list[DatasetEntry]:
+    """Lista os arquivos CSV disponíveis em ``data/bronze`` (recursivamente).
 
     Parameters
     ----------
-    data_raw : Path
-        Diretório ``data/raw``.
+    data_bronze : Path
+        Diretório ``data/bronze``.
 
     Returns
     -------
@@ -40,7 +40,7 @@ def list_raw_datasets(data_raw: Path) -> list[DatasetEntry]:
 
     Examples
     --------
-    >>> entries = list_raw_datasets(Path("data/raw"))
+    >>> entries = list_raw_datasets(Path("data/bronze"))
     """
     entries = [
         DatasetEntry(
@@ -48,6 +48,6 @@ def list_raw_datasets(data_raw: Path) -> list[DatasetEntry]:
             name=csv.name,
             size_mb=round(csv.stat().st_size / (1024 * 1024), 2),
         )
-        for csv in sorted(data_raw.rglob("*.csv"))
+        for csv in sorted(data_bronze.rglob("*.csv"))
     ]
     return sorted(entries, key=lambda entry: entry.size_mb, reverse=True)

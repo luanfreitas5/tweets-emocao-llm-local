@@ -22,6 +22,8 @@ llm
     Cliente Ollama, prompts e geração de resumos a partir de JSON.
 evaluation
     Métricas rigorosas (incerteza, avaliação por fatia).
+experiment
+    Rastreamento de experimentos com MLflow (linhagem, métricas, artefatos).
 visualization
     Gráficos com paleta consistente.
 pipelines
@@ -32,4 +34,4 @@ utils
     Utilitários compartilhados (I/O, hashing, timing).
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

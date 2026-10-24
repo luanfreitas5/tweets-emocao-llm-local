@@ -63,6 +63,21 @@ class SentimentClassifier:
         self.params = params
         self._pipeline: Any | None = None
 
+    @property
+    def is_loaded(self) -> bool:
+        """Indica se o pipeline do Hugging Face já foi carregado em memória."""
+        return self._pipeline is not None
+
+    def load(self) -> None:
+        """Carrega o modelo agora (usado no startup da API para falhar cedo).
+
+        Raises
+        ------
+        ModelLoadError
+            Se o modelo não puder ser carregado.
+        """
+        self._ensure_loaded()
+
     def _ensure_loaded(self) -> Any:
         """Carrega o pipeline do Hugging Face sob demanda (lazy).
 

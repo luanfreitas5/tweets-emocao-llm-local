@@ -6,7 +6,9 @@ import logging
 
 from src.config.paths import ProjectPaths
 from src.config.settings import Settings
+from src.pipelines.evaluation import run_evaluation
 from src.pipelines.preprocessing import run_preprocessing
+from src.pipelines.reporting import run_reporting
 from src.pipelines.sentiment import run_sentiment
 from src.pipelines.summarization import run_summarization
 from src.pipelines.topics import run_topics
@@ -22,7 +24,7 @@ def run_full_pipeline(
     *,
     with_topics: bool = True,
 ) -> SummaryResponse:
-    """Executa o fluxo completo: limpeza -> sentimento -> tópicos -> resumo.
+    """Executa o fluxo: limpeza -> sentimento -> tópicos -> avaliação -> figuras -> resumo.
 
     Parameters
     ----------
@@ -48,6 +50,9 @@ def run_full_pipeline(
         sentiment_df = with_sentiment
         if with_topics:
             sentiment_df, top_terms = run_topics(settings, paths, with_sentiment)
+
+        run_evaluation(settings, paths, sentiment_df)
+        run_reporting(paths, sentiment_df)
 
         response = run_summarization(settings, paths, sentiment_df, top_terms)
     logger.info("Pipeline concluído com sucesso.")

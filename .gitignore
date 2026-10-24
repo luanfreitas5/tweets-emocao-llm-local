@@ -30,10 +30,10 @@ env/
 # .secrets.baseline é commitado (usado pelo detect-secrets) — não ignorar.
 
 # --- Dados (versionados por DVC) -------------------------------------------
-data/raw/*
-data/external/*
-data/interim/*
-data/processed/*
+# Camadas medalhão: bronze (como recebido), silver (limpo/validado), gold (pronto p/ modelo).
+data/bronze/*
+data/silver/*
+data/gold/*
 # Mantém a estrutura de pastas e os ponteiros do DVC:
 !data/**/.gitkeep
 !data/**/*.dvc
@@ -45,6 +45,7 @@ models/*
 !models/**/*.dvc
 mlruns/
 mlartifacts/
+mlflow.db
 *.joblib
 *.pkl
 *.pt
@@ -79,12 +80,10 @@ site/
 .ipynb_checkpoints/
 
 # --- Relatórios gerados (mantém apenas templates versionados) ---------------
-reports/figures/*
-reports/metrics/*
-!reports/**/.gitkeep
+# Figuras e métricas ficam versionadas: o README cita estes arquivos como evidência.
+# (insights.json e summary.md são regenerados a cada execução e dependem do LLM local.)
 reports/insights.json
 reports/summary.md
-!reports/figures/.gitkeep
 
 # --- Profiling -------------------------------------------------------------
 *.speedscope

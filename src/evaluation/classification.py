@@ -69,12 +69,23 @@ def bootstrap_f1_macro(
     --------
     >>> lo, hi = bootstrap_f1_macro(y_true, y_pred)  # doctest: +SKIP
     """
+    # Reamostrar N pares (y_true, y_pred) com reposição equivale a sortear as
+    # contagens da matriz de confusão de uma multinomial(N, freq. observadas).
+    # Isso evita indexar arrays de tamanho N e chamar o sklearn a cada iteração.
     rng = np.random.default_rng(seed)
+    _, codes = np.unique(np.concatenate([y_true, y_pred]), return_inverse=True)
+    codes = codes.ravel()
     n = len(y_true)
-    scores = np.empty(iterations, dtype=np.float64)
-    for i in range(iterations):
-        idx = rng.integers(0, n, size=n)
-        scores[i] = f1_score(y_true[idx], y_pred[idx], average="macro", zero_division=0)  # pyright: ignore[reportArgumentType]
+    k = int(codes.max()) + 1
+    cells = np.bincount(codes[:n] * k + codes[n:], minlength=k * k)
+    samples = rng.multinomial(n, cells / n, size=iterations).reshape(iterations, k, k)
+
+    true_pos = np.diagonal(samples, axis1=1, axis2=2).astype(np.float64)
+    denominator = samples.sum(axis=1) + samples.sum(axis=2)  # 2TP + FP + FN
+    # Como no sklearn, classes ausentes da reamostra (denominador 0) saem da média.
+    present = denominator > 0
+    f1_per_class = np.divide(2 * true_pos, denominator, out=np.zeros_like(true_pos), where=present)
+    scores = f1_per_class.sum(axis=1) / present.sum(axis=1)
     return float(np.percentile(scores, 2.5)), float(np.percentile(scores, 97.5))
 
 

@@ -25,43 +25,46 @@ class ProjectPaths:
     ----------
     root : Path
         Raiz do repositório.
-    data_raw, data_interim, data_processed, data_external : Path
-        Diretórios dos estágios de dados.
-    raw_labeled : Path
-        CSV bruto rotulado por supervisão distante.
-    processed_tweets : Path
-        Parquet de tweets limpos (contrato ``ProcessedTweetsSchema``).
+    data_bronze, data_silver, data_gold : Path
+        Diretórios das camadas medalhão (bronze → silver → gold).
+    bronze_tweets : Path
+        CSV bruto rotulado por supervisão distante (camada bronze, imutável).
+    silver_tweets : Path
+        Parquet de tweets limpos (camada silver; contrato ``ProcessedTweetsSchema``).
     sentiment_predictions : Path
-        Parquet com as predições de sentimento.
+        Parquet com as predições de sentimento (camada gold).
     topic_assignments : Path
-        Parquet com a atribuição de tópicos.
+        Parquet com a atribuição de tópicos (camada gold).
     insights_json : Path
         JSON estruturado consumido pelo LLM.
     summary_markdown : Path
         Resumo em linguagem simples gerado pelo LLM.
     models_root, topic_model : Path
         Diretórios de modelos.
-    reports_root, figures : Path
-        Diretórios de relatórios e figuras.
+    classification_metrics : Path
+        JSON com as métricas de classificação (IC 95% e por classe).
+    reports_root, figures, metrics : Path
+        Diretórios de relatórios, figuras e métricas.
     logs : Path
         Diretório de logs.
     """
 
     root: Path
-    data_raw: Path
-    data_interim: Path
-    data_processed: Path
-    data_external: Path
-    raw_labeled: Path
-    processed_tweets: Path
+    data_bronze: Path
+    data_silver: Path
+    data_gold: Path
+    bronze_tweets: Path
+    silver_tweets: Path
     sentiment_predictions: Path
     topic_assignments: Path
     insights_json: Path
     summary_markdown: Path
+    classification_metrics: Path
     models_root: Path
     topic_model: Path
     reports_root: Path
     figures: Path
+    metrics: Path
     logs: Path
 
     directories: tuple[Path, ...] = field(default=(), compare=False)
@@ -100,7 +103,7 @@ def get_paths(paths_yaml: Path = PATHS_YAML, root: Path = ROOT) -> ProjectPaths:
     Examples
     --------
     >>> paths = get_paths()
-    >>> paths.processed_tweets.name
+    >>> paths.silver_tweets.name
     'tweets_processed.parquet'
     """
     if not paths_yaml.exists():
@@ -116,31 +119,33 @@ def get_paths(paths_yaml: Path = PATHS_YAML, root: Path = ROOT) -> ProjectPaths:
 
     paths = ProjectPaths(
         root=root,
-        data_raw=_abs(root, data["raw"]),
-        data_interim=_abs(root, data["interim"]),
-        data_processed=_abs(root, data["processed"]),
-        data_external=_abs(root, data["external"]),
-        raw_labeled=_abs(root, files["raw_labeled"]),
-        processed_tweets=_abs(root, files["processed_tweets"]),
+        data_bronze=_abs(root, data["bronze"]),
+        data_silver=_abs(root, data["silver"]),
+        data_gold=_abs(root, data["gold"]),
+        bronze_tweets=_abs(root, files["bronze_tweets"]),
+        silver_tweets=_abs(root, files["silver_tweets"]),
         sentiment_predictions=_abs(root, files["sentiment_predictions"]),
         topic_assignments=_abs(root, files["topic_assignments"]),
         insights_json=_abs(root, files["insights_json"]),
         summary_markdown=_abs(root, files["summary_markdown"]),
+        classification_metrics=_abs(root, files["classification_metrics"]),
         models_root=_abs(root, models["root"]),
         topic_model=_abs(root, models["topic_model"]),
         reports_root=_abs(root, reports["root"]),
         figures=_abs(root, reports["figures"]),
+        metrics=_abs(root, reports["metrics"]),
         logs=_abs(root, cfg["logs"]),
     )
     object.__setattr__(
         paths,
         "directories",
         (
-            paths.data_interim,
-            paths.data_processed,
+            paths.data_silver,
+            paths.data_gold,
             paths.models_root,
             paths.reports_root,
             paths.figures,
+            paths.metrics,
             paths.logs,
         ),
     )

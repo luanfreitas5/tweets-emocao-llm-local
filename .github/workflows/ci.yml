@@ -28,7 +28,7 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
           python-version: "3.12"
-      - run: uv sync --dev
+      - run: uv sync --locked
       - run: uv run ruff check .
       - run: uv run ruff format --check .
 
@@ -42,7 +42,7 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
           python-version: "3.12"
-      - run: uv sync --dev
+      - run: uv sync --locked
       - run: uv run basedpyright
 
   security:
@@ -55,7 +55,7 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
           python-version: "3.12"
-      - run: uv sync --dev
+      - run: uv sync --locked --group quality
       - run: uv run bandit -r src -c pyproject.toml
       - run: uv run pip-audit
 
@@ -69,7 +69,7 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
           python-version: "3.12"
-      - run: uv sync --dev
+      - run: uv sync --locked --group quality
       - run: uv run vulture src
       - run: uv run refurb src
       - run: uv run xenon --max-absolute B --max-modules A --max-average A src

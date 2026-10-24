@@ -1,49 +1,79 @@
-"""Injeção de dependências da API (settings e componentes cacheados).
+"""Injeção de dependências da API (componentes criados uma vez no ``lifespan``).
 
-Usa ``lru_cache`` para instanciar os componentes pesados (classificador,
-summarizer) uma única vez por processo.
+Os componentes pesados (classificador, summarizer) são instanciados no startup e
+guardados em ``app.state``; as dependências abaixo apenas os expõem aos
+roteadores. Nada é carregado dentro de um endpoint.
 """
 
 from __future__ import annotations
 
-from functools import lru_cache
+from fastapi import Request
 
-from src.config.settings import Settings, load_settings
+from app.schemas import ModelMetadata
+from src.config.settings import Settings
 from src.llm.summarizer import InsightSummarizer
 from src.models.sentiment import SentimentClassifier
 
 
-@lru_cache(maxsize=1)
-def get_settings() -> Settings:
-    """Carrega e cacheia a configuração do projeto.
+def get_settings(request: Request) -> Settings:
+    """Retorna a configuração validada carregada no startup.
+
+    Parameters
+    ----------
+    request : Request
+        Requisição corrente (dá acesso a ``app.state``).
 
     Returns
     -------
     Settings
-        Configuração validada (instância única por processo).
+        Configuração do projeto.
     """
-    return load_settings()
+    return request.app.state.settings
 
 
-@lru_cache(maxsize=1)
-def get_classifier() -> SentimentClassifier:
-    """Instancia (uma vez) o classificador de sentimento.
+def get_classifier(request: Request) -> SentimentClassifier:
+    """Retorna o classificador de sentimento criado no startup.
+
+    Parameters
+    ----------
+    request : Request
+        Requisição corrente.
 
     Returns
     -------
     SentimentClassifier
-        Classificador pronto para inferência (carregamento lazy do modelo).
+        Classificador (carregado no startup quando ``preload_model`` é verdadeiro).
     """
-    return SentimentClassifier(get_settings().model.sentiment)
+    return request.app.state.classifier
 
 
-@lru_cache(maxsize=1)
-def get_summarizer() -> InsightSummarizer:
-    """Instancia (uma vez) o summarizer que fala com o LLM local.
+def get_summarizer(request: Request) -> InsightSummarizer:
+    """Retorna o summarizer (Ollama local) criado no startup.
+
+    Parameters
+    ----------
+    request : Request
+        Requisição corrente.
 
     Returns
     -------
     InsightSummarizer
         Componente de resumo baseado no Ollama local.
     """
-    return InsightSummarizer(get_settings().llm)
+    return request.app.state.summarizer
+
+
+def get_metadata(request: Request) -> ModelMetadata:
+    """Retorna os metadados de versão do serviço montados no startup.
+
+    Parameters
+    ----------
+    request : Request
+        Requisição corrente.
+
+    Returns
+    -------
+    ModelMetadata
+        Versões da API, dos modelos e do commit.
+    """
+    return request.app.state.metadata

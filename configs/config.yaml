@@ -12,5 +12,12 @@ language: "pt"
 # Amostragem para execuções rápidas/dev. `null` = usa toda a base (~800k).
 sample_size: null
 
-# Nível de log padrão (sobrescrito por configs/logging.yaml).
+# Nível de log padrão (a configuração dos handlers fica em configs/logging.yaml).
 log_level: "INFO"
+
+# Rastreamento de experimentos (MLflow). Backend SQLite: nunca o file store ./mlruns.
+# `enabled: false` por padrão; ative por execução com `--track` (exige árvore Git limpa).
+experiment:
+  enabled: false
+  tracking_uri: "sqlite:///mlruns/mlflow.db"
+  experiment_name: "tweets-emocao-llm-local"

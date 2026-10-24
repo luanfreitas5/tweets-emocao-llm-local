@@ -7,6 +7,10 @@
 #   uv run pre-commit install
 #   uv run pre-commit install --hook-type commit-msg   # ativa o commitizen
 #   uv run detect-secrets scan > .secrets.baseline      # gera o baseline
+#   uv run pre-commit autoupdate                         # reatualiza os `rev` fixados
+#
+# Gates: pre-commit = rápido (segundos, só arquivos staged). O CI é o gate real
+# (branch protection: CI verde antes do merge); `make check` replica o CI local.
 # =============================================================================
 
 default_install_hook_types: [pre-commit, commit-msg]
@@ -61,4 +65,5 @@ repos:
         entry: uv run pytest -m smoke -q --no-cov
         language: system
         pass_filenames: false
+        types: [python]
         stages: [pre-commit]

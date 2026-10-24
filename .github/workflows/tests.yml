@@ -37,10 +37,10 @@ jobs:
         run: brew install libomp
 
       - name: Instalar dependências
-        run: uv sync --dev
+        run: uv sync --locked --extra api  # extra da API: sem ele test_api.py é pulado
 
       - name: Rodar testes
-        run: uv run pytest -m "not slow"
+        run: uv run pytest -m "not slow" --cov --cov-report=term-missing --cov-report=xml
 
       - name: Upload de cobertura (Codecov)
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'

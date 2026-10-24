@@ -28,6 +28,25 @@ def test_bootstrap_ci_is_ordered():
     assert lo <= hi
 
 
+def test_bootstrap_ci_matches_sklearn_resampling():
+    """O IC vetorizado concorda com o bootstrap clássico via f1_score do sklearn."""
+    from sklearn.metrics import f1_score
+
+    rng = np.random.default_rng(1)
+    labels = ["Positivo", "Negativo", "Neutro"]
+    y_true = rng.choice(labels, size=2000, p=[0.5, 0.3, 0.2])
+    y_pred = np.where(rng.random(2000) < 0.7, y_true, rng.choice(labels, size=2000))
+    lo, hi = bootstrap_f1_macro(y_true, y_pred, iterations=1000)
+
+    scores = []
+    for _ in range(300):
+        idx = rng.integers(0, len(y_true), size=len(y_true))
+        scores.append(f1_score(y_true[idx], y_pred[idx], average="macro"))
+    ref_lo, ref_hi = np.percentile(scores, [2.5, 97.5])
+    assert abs(lo - ref_lo) < 0.01
+    assert abs(hi - ref_hi) < 0.01
+
+
 def test_evaluate_by_slice_returns_score_per_group():
     """A avaliação por fatia retorna um F1 para cada valor de fatia."""
     y_true = np.array(["Positivo", "Negativo", "Positivo", "Negativo"])

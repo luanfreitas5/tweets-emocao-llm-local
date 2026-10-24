@@ -21,6 +21,6 @@ def test_load_settings_from_configs():
 def test_paths_resolve_to_absolute():
     """Os caminhos do projeto resolvem para absolutos e coerentes."""
     paths = get_paths()
-    assert paths.processed_tweets.is_absolute()
-    assert paths.processed_tweets.suffix == ".parquet"
+    assert paths.silver_tweets.is_absolute()
+    assert paths.silver_tweets.suffix == ".parquet"
     assert paths.root.name == "tweets-emocao-llm-local"

@@ -1,4 +1,4 @@
-"""Pipeline de classificação de sentimento: processado -> predições."""
+"""Pipeline de classificação de sentimento: silver -> gold (predições)."""
 
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ def run_sentiment(
     paths : ProjectPaths
         Caminhos do projeto.
     tweets_df : pl.DataFrame | None, optional
-        DataFrame processado; se ``None``, lê de ``paths.processed_tweets``.
+        DataFrame processado; se ``None``, lê de ``paths.silver_tweets``.
     chunk_size : int, optional
         Tamanho do bloco de textos por chamada, by default 10_000.
 
@@ -42,7 +42,7 @@ def run_sentiment(
         persistido em ``paths.sentiment_predictions``.
     """
     if tweets_df is None:
-        tweets_df = read_parquet(paths.processed_tweets)
+        tweets_df = read_parquet(paths.silver_tweets)
 
     classifier = SentimentClassifier(settings.model.sentiment)
     texts = tweets_df[ProcessedColumns.TEXT_CLEAN].to_list()

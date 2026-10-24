@@ -9,7 +9,7 @@ name = "tweets-emocao-llm-local"
 version = "0.2.0"
 description = "Análise de emoção e tópicos em ~800k tweets em pt-BR: Python calcula (BERTimbau + BERTopic), LLM local (Ollama) apenas explica."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.14"
 license = { text = "MIT" }
 authors = [{ name = "Luan Freitas", email = "luan.freitas@gmail.com" }]
 keywords = [
@@ -81,6 +81,7 @@ api = [
 ]
 
 [tool.uv]
+default-groups = ["dev"]
 required-environments = [
     "sys_platform == 'win32' and platform_machine == 'AMD64'",
     "sys_platform == 'linux' and platform_machine == 'x86_64'",
@@ -104,43 +105,42 @@ torchaudio = { index = "pytorch-cu129" }
 
 
 
-# --- Dependências de desenvolvimento (não publicadas; PEP 735) --------------
+# --- Grupos de dependências (PEP 735). Apenas `dev` é instalado por padrão. -----
+# dev       : fluxo diário (lint, tipos, testes, hooks) — roda no pre-commit/CI de testes
+# quality   : checagens pesadas do CI (segurança, código morto, complexidade, docstrings)
+# docs      : MkDocs Material + mkdocstrings
+# profiling : medir antes de otimizar (uso sob demanda)
 [dependency-groups]
 dev = [
-    # Lint + format
-    "ruff>=0.16.0",                    # Um linter e formatador de código Python extremamente rápido - substitui flake8/isort/black
-    # Type checking (roda no CI, não no pre-commit)
-    "basedpyright>=1.13",           # Um type checker estático para Python, baseado no Pyright da Microsoft - substitui mypy
-    # Segurança (roda no CI)
-    "bandit>=1.7",                  # Um analisador de segurança para código Python
-    "pip-audit>=2.7",               # Um auditor de segurança para dependências Python (substitui o safety, que arrastava nltk vulnerável)
-    "detect-secrets>=1.5",          # Um detector de segredos em código Python
-    # Qualidade / complexidade / docstrings
-    "vulture>=2.11",                # Um verificador de código morto para Python
-    "refurb>=2.0",                  # Um utilitário para refatoração de código Python
-    "xenon>=0.9",                   # Um analisador de complexidade para Python
-    "radon>=6.0",                   # Um analisador de complexidade para Python
-    "interrogate>=1.7",             # Um verificador de docstrings para Python
-    # Testes
-    "pytest>=8.2",                  # Um framework de teste para Python
-    "pytest-cov>=5.0",              # Um plugin para pytest que fornece cobertura de código
-    "hypothesis>=6.163.0",            # Um framework de teste property-based para Python
-    # Notebooks
-    "nbqa>=1.8",                    # Um utilitário para aplicar linters a notebooks do Jupyter
-    "nbstripout>=0.7",              # Um utilitário para remover saídas e metadados de notebooks do Jupyter
-    # Workflow
-    "pre-commit>=4.6.1",              # Um framework para gerenciar hooks de commit no Git
-    "commitizen>=4.16.5",             # Um utilitário para manter o histórico de commits consistente
-    # Documentação
-    "mkdocs-material>=9.7.7",         # Um tema para MkDocs
-    "mkdocstrings[python]>=1.0.6",   # Um plugin para MkDocs que gera documentação a partir de docstrings
-    # Profiling (use sob demanda)
-    "scalene>=1.5",                 # Um profiler de performance para Python
-    # Ferramentas para rodar Data Wrangler no Vscode
-    "pip>=26.1.2",                  # Um gerenciador de pacotes para Python
-    "ipykernel>=7.3.0",             # Um kernel para Jupyter que executa código Python             # Um conjunto de widgets interativos para Jupyter
+    "ruff>=0.16.0",            # lint + format (substitui flake8/isort/black)
+    "basedpyright>=1.13",      # type checking estático (roda no CI, não no pre-commit)
+    "pytest>=8.2",
+    "pytest-cov>=5.0",
+    "hypothesis>=6.163.0",     # testes property-based
+    "pre-commit>=4.6.1",
+    "commitizen>=4.16.5",      # Conventional Commits + CHANGELOG
+    "detect-secrets>=1.5",
+    "nbstripout>=0.7",
+    "nbqa>=1.8",
+    # Ferramentas para rodar Data Wrangler / notebooks no VSCode
+    "pip>=26.1.2",
+    "ipykernel>=7.3.0",
     "ipywidgets>=8.1.8",
 ]
+quality = [
+    "bandit[toml]>=1.7",
+    "pip-audit>=2.7",          # substitui o safety, que arrastava nltk vulnerável
+    "vulture>=2.11",
+    "refurb>=2.0",
+    "xenon>=0.9",
+    "radon>=6.0",
+    "interrogate>=1.7",
+]
+docs = [
+    "mkdocs-material>=9.7.7",
+    "mkdocstrings[python]>=1.0.6",
+]
+profiling = ["scalene>=1.5"]
 
 [build-system]
 requires = ["hatchling"]
@@ -192,7 +192,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["src"]
+known-first-party = ["src", "app"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"  # docstrings no formato NumPy
@@ -244,12 +244,8 @@ ignore = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
-addopts = [
-    "--strict-markers",
-    "--cov=src",
-    "--cov-report=term-missing",
-    "--cov-report=xml",
-]
+# Cobertura é opt-in (`make test`, CI): o smoke do pre-commit roda sem --cov, rápido.
+addopts = ["-ra", "--strict-markers"]
 filterwarnings = [
     # Avisos internos de bibliotecas de terceiros, fora do nosso controle.
     "ignore:.*set_(bad|over|under) function will be deprecated.*:PendingDeprecationWarning:shap.*",

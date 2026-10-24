@@ -17,7 +17,7 @@ A arquitetura central é **"Python calcula, LLM explica"**:
 ## Fluxo
 
 ```
-raw CSV → limpeza → sentimento (BERTimbau) → tópicos (BERTopic)
+bronze (CSV) → silver → limpeza → sentimento (BERTimbau) → tópicos (BERTopic)
         → InsightsReport (JSON) → resumo (Ollama)
 ```
 

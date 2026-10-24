@@ -73,7 +73,7 @@ def load_raw_tweets(
 
     Examples
     --------
-    >>> df = load_raw_tweets(Path("data/raw/NoThemeTweets.csv"), sample_size=100)
+    >>> df = load_raw_tweets(Path("data/bronze/NoThemeTweets.csv"), sample_size=100)
     """
     if not path.exists():
         raise RawDataError(f"Arquivo bruto não encontrado: {path}")

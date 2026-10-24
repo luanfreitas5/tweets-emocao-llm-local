@@ -7,7 +7,7 @@ loader
 splitter
     Particiona os dados em treino/validação/teste de forma estratificada.
 catalog
-    Cataloga os arquivos disponíveis em ``data/raw``.
+    Cataloga os arquivos disponíveis em ``data/bronze``.
 """
 
 from src.data.catalog import DatasetEntry, list_raw_datasets

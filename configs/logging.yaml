@@ -1,23 +1,37 @@
 # =============================================================================
-# logging.yaml — configuração do logger (console rich + arquivo com rotação).
-# Consumido por src/config/logging.py.
+# logging.yaml — configuração única de logging (formato dictConfig).
+# Aplicada por src/config/logging.py::configure_logging() no ponto de entrada.
+# Nível sobrescrevível via CLI: --log-level DEBUG.
 # =============================================================================
+version: 1
+disable_existing_loggers: false  # true (padrão) silencia loggers criados em imports anteriores
 
-level: "INFO"
+formatters:
+  console:
+    format: "%(name)s | %(message)s"  # RichHandler já exibe hora, nível e arquivo:linha
+  file:
+    format: "%(asctime)s \t %(levelname)s \t %(name)s \t %(message)s"
 
-console:
-  # Handler rico (cor + tracebacks). Inclui name, levelname e message.
-  rich_tracebacks: true
-  show_path: true
-  show_time: true
+handlers:
+  console:
+    "()": src.config.logging.create_console_handler
+    formatter: console
+  file:
+    "()": src.config.logging.create_daily_file_handler
+    filename: logs/log.log  # rotacionado à meia-noite para logs/log_YYYY-MM-DD.log
+    backup_count: 14
+    formatter: file
 
-file:
-  enabled: true
-  directory: "logs"
-  # Rotação diária: logs/log_YYYY-MM-DD.log
-  filename_pattern: "log_%Y-%m-%d.log"
-  # Formato do arquivo (separado por TAB), conforme padrão do projeto.
-  format: "%(asctime)s \t %(levelname)s \t %(name)s \t %(message)s"
-  when: "midnight"
-  backup_count: 14
-  encoding: "utf-8"
+loggers:  # apenas níveis de bibliotecas ruidosas; handlers ficam só no root
+  matplotlib: {level: WARNING}
+  transformers: {level: WARNING}
+  sentence_transformers: {level: WARNING}
+  httpx: {level: WARNING}
+  httpcore: {level: WARNING}
+  urllib3: {level: WARNING}
+  numba: {level: WARNING}
+  alembic: {level: WARNING}
+
+root:
+  level: INFO
+  handlers: [console, file]
