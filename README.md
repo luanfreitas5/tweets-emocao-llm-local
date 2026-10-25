@@ -1,4 +1,4 @@
-# Análise de Emoção e Tópicos em Tweets com LLM Local: Emoção e tópicos em 713 mil tweets em português, com LLM 100% local
+# Emocao e Topicos em Tweets com LLM Local: Emoção e tópicos em 713 mil tweets em português, com LLM 100% local
 
 [![CI](https://github.com/luanfreitas5/tweets-emocao-llm-local/actions/workflows/ci.yml/badge.svg)](https://github.com/luanfreitas5/tweets-emocao-llm-local/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/luanfreitas5/tweets-emocao-llm-local/graph/badge.svg)](https://codecov.io/gh/luanfreitas5/tweets-emocao-llm-local)
