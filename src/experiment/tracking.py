@@ -75,7 +75,7 @@ def compute_git_sha(root: Path = ROOT, *, allow_dirty: bool = False) -> str:
     Examples
     --------
     >>> compute_git_sha()  # doctest: +SKIP
-    '2ce7e7d64f11fc416cd75cab49a9c92ec3151f24'
+    '2ce7e7d64f11fc416cd75cab49a9c92ec3151f24'  # pragma: allowlist secret
     """
     status = subprocess.run(  # nosec B603 B607 - comando fixo, sem entrada externa
         ["git", "status", "--porcelain"],
