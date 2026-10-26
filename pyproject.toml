@@ -94,14 +94,14 @@ required-environments = [
 constraint-dependencies = ["gitpython>=3.1.51", "setuptools>=83.0.0"]
 
 [[tool.uv.index]]
-name = "pytorch-cu129"
-url = "https://download.pytorch.org/whl/cu129"
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
 explicit = true
 
 [tool.uv.sources]
-torch = { index = "pytorch-cu129" }
-torchvision = { index = "pytorch-cu129" }
-torchaudio = { index = "pytorch-cu129" }
+torch = { index = "pytorch-cu128" }
+torchvision = { index = "pytorch-cu128" }
+torchaudio = { index = "pytorch-cu128" }
 
 
 
@@ -189,6 +189,7 @@ ignore = [
     "PLR2004", # "magic value" em comparação — comum em thresholds de modelo
     "TRY003",  # mensagem longa em exceção customizada
     "PLR0917", # muitos parâmetros em função — comum em pipelines de ML
+    "PLC0415", # import fora do topo — usado em testes para isolar imports
 ]
 
 [tool.ruff.lint.isort]

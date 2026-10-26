@@ -33,7 +33,7 @@ def seed_everything(seed: int = RANDOM_SEED) -> None:
     rng.normal()
 
     with suppress(ImportError):  # opcional: só se torch estiver instalado
-        import torch  # noqa: PLC0415
+        import torch
 
         torch.manual_seed(seed)
         if torch.cuda.is_available():

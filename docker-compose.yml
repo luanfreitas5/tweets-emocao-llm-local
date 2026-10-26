@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
 
   ollama:
-    image: ollama/ollama:${OLLAMA_VERSION:?defina OLLAMA_VERSION no .env (ex.: tag atual do Docker Hub)}
+    image: "ollama/ollama:${OLLAMA_VERSION:?defina OLLAMA_VERSION no .env (ex.: tag atual do Docker Hub)}"
     ports:
       - "127.0.0.1:11434:11434"
     volumes:

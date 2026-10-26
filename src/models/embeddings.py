@@ -56,7 +56,7 @@ class EmbeddingEncoder:
         if self._model is not None:
             return self._model
         try:
-            from sentence_transformers import SentenceTransformer  # noqa: PLC0415
+            from sentence_transformers import SentenceTransformer
 
             logger.info("Carregando modelo de embeddings: %s", self.params.model_name)
             self._model = SentenceTransformer(self.params.model_name)

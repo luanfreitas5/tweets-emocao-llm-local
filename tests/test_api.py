@@ -12,11 +12,11 @@ import pytest
 
 pytest.importorskip("fastapi")
 
-from fastapi.testclient import TestClient  # noqa: E402
+from fastapi.testclient import TestClient
 
-from app.main import create_app  # noqa: E402
-from src.models.base import Prediction  # noqa: E402
-from src.preprocessing.cleaning import clean_tweet  # noqa: E402
+from app.main import create_app
+from src.models.base import Prediction
+from src.preprocessing.cleaning import clean_tweet
 
 
 class FakeClassifier:

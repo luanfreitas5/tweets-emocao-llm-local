@@ -50,7 +50,7 @@ class OllamaClient:
         if self._client is not None:
             return self._client
         try:
-            from ollama import Client  # noqa: PLC0415
+            from ollama import Client
 
             self._client = Client(host=self.settings.host, timeout=self.settings.timeout)
         except ImportError as error:  # pragma: no cover

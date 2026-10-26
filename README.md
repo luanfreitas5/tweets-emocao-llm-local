@@ -12,6 +12,8 @@
 > simples (regressão logística) ainda não foi treinado. Conclusão honesta: os números servem para análise *agregada e
 > exploratória*; **não** sustentam classificar tweets individuais.
 
+![Emoção e Tópicos em Tweets com LLM Local](banner/tweets.png)
+
 ## 🎯 Problema
 
 - **Quem decide o quê:** um analista de opinião quer saber *como o público se sente* e *sobre o quê* em um grande volume

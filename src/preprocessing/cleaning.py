@@ -70,9 +70,10 @@ def clean_tweet(text: str, *, drop_leakage: bool = True) -> str:
     cleaned = regex.MENTION.sub(" ", cleaned)
     cleaned = regex.HASHTAG.sub(" ", cleaned)
     cleaned = regex.EMOTICON.sub(" ", cleaned)
-    cleaned = regex.NUMBER.sub(" ", cleaned)
-    # casefold antes do colapso de repetidos: ß -> "ss" pode criar uma nova
-    # repetição de 3 chars, e o colapso precisa enxergá-la para ser idempotente.
+    # casefold antes de números e do colapso de repetidos: ele pode criar novos
+    # caracteres (ß -> "ss", ẖ -> "h" + marca combinante) que alteram as bordas
+    # de palavra e as repetições; sem isso a limpeza não seria idempotente.
     cleaned = cleaned.casefold()
+    cleaned = regex.NUMBER.sub(" ", cleaned)
     cleaned = regex.REPEATED_CHARS.sub(r"\1\1", cleaned)
     return regex.WHITESPACE.sub(" ", cleaned).strip()

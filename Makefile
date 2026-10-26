@@ -5,7 +5,7 @@ RUN := $(UV) run python -m src.main
 SAMPLE_SIZE ?= 5000
 
 .DEFAULT_GOAL := help
-.PHONY: help install ollama lint format typecheck security quality test smoke check hooks pre-commit \
+.PHONY: help install ollama hooks lint format typecheck security quality test smoke check hooks pre-commit \
 	update lock release docs docs-serve docs-deploy profile clean \
 	preprocess classify topics evaluate plot summarize pipeline sample train reproduce \
 	api mlflow mlflow-ui docker-config docker-build docker-up docker-down
@@ -21,6 +21,10 @@ install:  ## Instala todos os grupos + extra da API + hooks do git
 
 ollama:  ## Instala o llama3.1:8b
 	$(UV) run ollama pull llama3.1:8b
+
+hooks:  ## Instala os hooks do pre-commit
+	$(UV) run pre-commit install --hook-type pre-commit --hook-type commit-msg
+	$(UV) run detect-secrets scan > .secrets.baseline
 
 update:  ## Atualiza dependências e o uv.lock (commite o lock)
 	$(UV) lock --upgrade

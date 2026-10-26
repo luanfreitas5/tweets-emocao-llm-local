@@ -186,7 +186,7 @@ def configure_tracking(settings: ExperimentSettings, root: Path = ROOT) -> str:
     str
         URI efetivamente configurada.
     """
-    import mlflow  # noqa: PLC0415 - import tardio: mlflow é pesado e opcional por execução
+    import mlflow
 
     raw_uri = os.environ.get("MLFLOW_TRACKING_URI") or settings.tracking_uri
     uri = _resolve_tracking_uri(raw_uri, root)
@@ -235,7 +235,7 @@ def tracked_run(
         yield
         return
 
-    import mlflow  # noqa: PLC0415
+    import mlflow
 
     tags = build_run_tags(paths.bronze_tweets, settings.random_seed, allow_dirty=allow_dirty)
     configure_tracking(settings.experiment, paths.root)
@@ -268,7 +268,7 @@ def log_evaluation(report: ClassificationReport, n_samples: int) -> None:
     }
     for label, values in report.per_class.items():
         if isinstance(values, dict) and "f1-score" in values:
-            metrics[f"f1_{label.lower()}"] = float(values["f1-score"])
+            metrics[f"f1_{label.lower()}"] = values["f1-score"]
     for slice_name, value in report.per_slice.items():
         metrics[f"f1_macro_slice_{slice_name}"] = value
     mlflow.log_metrics(metrics)

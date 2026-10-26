@@ -53,7 +53,7 @@ class TopicModel:
             Se o BERTopic não puder ser instanciado.
         """
         try:
-            from bertopic import BERTopic  # noqa: PLC0415
+            from bertopic import BERTopic
 
             nr_topics = None if self.params.nr_topics == "auto" else self.params.nr_topics
             return BERTopic(

@@ -44,9 +44,7 @@ def _rename_rotated(default_name: str) -> str:
     return str(path.with_name(f"{stem}_{date_str}.log"))
 
 
-def create_daily_file_handler(
-    filename: str, backup_count: int = 30
-) -> TimedRotatingFileHandler:
+def create_daily_file_handler(filename: str, backup_count: int = 30) -> TimedRotatingFileHandler:
     """Cria o handler de arquivo com rotação diária à meia-noite.
 
     Parameters

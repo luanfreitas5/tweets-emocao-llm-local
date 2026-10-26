@@ -37,7 +37,7 @@ def _resolve_device(device: str) -> int:
     if device == "cpu":
         return -1
     with suppress(ImportError):
-        import torch  # noqa: PLC0415
+        import torch
 
         if device in {"auto", "cuda"} and torch.cuda.is_available():
             return 1
@@ -94,7 +94,7 @@ class SentimentClassifier:
         if self._pipeline is not None:
             return self._pipeline
         try:
-            from transformers import pipeline  # noqa: PLC0415
+            from transformers import pipeline
 
             logger.info("Carregando modelo de sentimento: %s", self.params.model_name)
             self._pipeline = pipeline(
